@@ -24,7 +24,7 @@ namespace MauiAppTempoAgora.Services
 
                     var rascunho = JObject.Parse(json);
 
-                  
+
                     t = new()
                     {
                         lat = (double)rascunho["coord"]["lat"],
@@ -38,6 +38,12 @@ namespace MauiAppTempoAgora.Services
                         sunrise = DateTimeOffset.FromUnixTimeSeconds((long)rascunho["sys"]["sunrise"]).LocalDateTime.ToString(),
                         sunset = DateTimeOffset.FromUnixTimeSeconds((long)rascunho["sys"]["sunset"]).LocalDateTime.ToString()
                     };
+                }
+                else if (resp.StatusCode == System.Net.HttpStatusCode.NotFound) {
+                    throw new Exception("Cidade não encontrada. Verifique o nome e tente novamente.");
+                } else
+                {
+                    throw new Exception($"Erro: {resp.StatusCode}");
                 }
             }
 
